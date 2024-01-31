@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario de Direcciones</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Formulario de Direcciones</h2>
+  <form id="direccionForm">
+    <div class="form-group">
+      <label for="pais">País:</label>
+      <select class="form-control" id="pais" onchange="cargarEstados()">
+        <option value="mexico">México</option>
+        <option value="japon">Japón</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="estado">Estado/Municipio/Ciudad:</label>
+      <select class="form-control" id="estado" onchange="cargarLocalidades()">
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="localidad">Localidad:</label>
+      <select class="form-control" id="localidad">
+      </select>
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="mostrarDatos()">Enviar</button>
+  </form>
+
+  <div id="resultado" class="mt-4"></div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+  const paises = {
+    mexico: {
+      estados: ["Hidalgo", "Querétaro", "Puebla", "Nuevo León", "Veracruz"],
+      localidades: {
+        hidalgo: ["Tula", "Tepeji", "Mixquiahuala", "Pachuca", "Tizayuca"],
+        queretaro: ["Querétaro", "San Juan del Río", "Corregidora", "El Marqués", "Tequisquiapan"],
+        puebla: ["Puebla", "Tlaxcala", "Atlixco", "Cholula", "Teziutlán"],
+        nuevo_leon: ["Monterrey", "San Pedro", "Guadalupe", "Escobedo", "Santa Catarina"],
+        veracruz: ["Veracruz", "Xalapa", "Coatzacoalcos", "Córdoba", "Poza Rica"]
+      }
+    },
+    japon: {
+      estados: ["Tokio", "Osaka", "Kioto", "Hokkaido", "Fukuoka"],
+      localidades: {
+        tokio: ["Shinjuku", "Shibuya", "Chiyoda", "Minato", "Bunkyō"],
+        osaka: ["Chūō-ku", "Kita-ku", "Osaka Castle", "Tennoji", "Naniwa"],
+        kioto: ["Higashiyama", "Shimogyo", "Nakagyo", "Ukyo", "Fushimi"],
+        hokkaido: ["Sapporo", "Asahikawa", "Hakodate", "Obihiro", "Kushiro"],
+        fukuoka: ["Hakata-ku", "Fukuoka", "Chūō-ku", "Higashi-ku", "Sawara-ku"]
+      }
+    }
+  };
+
+  function cargarEstados() {
+    const paisSelect = document.getElementById("pais");
+    const estadoSelect = document.getElementById("estado");
+
+    const selectedPais = paisSelect.value;
+    estadoSelect.innerHTML = "";
+
+    paises[selectedPais].estados.forEach(estado => {
+      const option = document.createElement("option");
+      option.value = estado.toLowerCase();
+      option.text = estado;
+      estadoSelect.add(option);
+    });
+
+    cargarLocalidades(); // Cargar las localidades al inicio
+  }
+
+  function cargarLocalidades() {
+    const estadoSelect = document.getElementById("estado");
+    const localidadSelect = document.getElementById("localidad");
+
+    const selectedPais = document.getElementById("pais").value;
+    const selectedEstado = estadoSelect.value;
+    localidadSelect.innerHTML = "";
+
+    paises[selectedPais].localidades[selectedEstado].forEach(localidad => {
+      const option = document.createElement("option");
+      option.value = localidad.toLowerCase();
+      option.text = localidad;
+      localidadSelect.add(option);
+    });
+  }
+
+  function mostrarDatos() {
+    const pais = document.getElementById("pais").value;
+    const estado = document.getElementById("estado").value;
+    const localidad = document.getElementById("localidad").value;
+
+    const resultadoDiv = document.getElementById("resultado");
+    resultadoDiv.innerHTML = `<h4>Datos Seleccionados:</h4>
+                              <p><strong>País:</strong> ${pais}</p>
+                              <p><strong>Estado/Municipio/Ciudad:</strong> ${estado}</p>
+                              <p><strong>Localidad:</strong> ${localidad}</p>`;
+  }
+</script>
+
+</body>
+</html>
